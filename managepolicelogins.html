@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Police Logins</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fbc2eb, #a6c0fe);
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4a90e2;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f4f6f9;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .action-buttons a {
+            text-decoration: none;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .deactivate-button {
+            background-color: #e94e77;
+        }
+
+        .deactivate-button:hover {
+            background-color: #d43f60;
+            transform: translateY(-2px);
+        }
+
+        .activate-button {
+            background-color: #4caf50;
+        }
+
+        .activate-button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-link a {
+            color: #4a90e2;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: color 0.3s ease, text-decoration 0.3s ease;
+        }
+
+        .back-link a:hover {
+            color: #357abd;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.9rem;
+            }
+
+            .action-buttons a {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Manage Police Logins</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="logins-table-body">
+                <!-- Users will be dynamically added here -->
+            </tbody>
+        </table>
+
+        <div class="back-link">
+            <a href="index.html">Back to Main Page</a>
+        </div>
+    </div>
+
+    <script>
+        function renderTable() {
+            const logins = JSON.parse(localStorage.getItem('policeLogins')) || [];
+            const tableBody = document.getElementById('logins-table-body');
+
+            tableBody.innerHTML = ''; // Clear table before rendering
+
+            logins.forEach((login, index) => {
+                const row = document.createElement('tr');
+
+                const usernameCell = document.createElement('td');
+                usernameCell.textContent = login.username;
+
+                const statusCell = document.createElement('td');
+                statusCell.textContent = login.active ? 'Active' : 'Deactivated';
+
+                const actionCell = document.createElement('td');
+                const actionButtons = document.createElement('div');
+                actionButtons.classList.add('action-buttons');
+
+                // Deactivate button
+                const deactivateButton = document.createElement('a');
+                deactivateButton.textContent = 'Deactivate';
+                deactivateButton.classList.add('deactivate-button');
+                deactivateButton.href = '#';
+                deactivateButton.addEventListener('click', () => {
+                    logins[index].active = false;
+                    localStorage.setItem('policeLogins', JSON.stringify(logins));
+                    renderTable(); // Re-render the table to reflect the changes
+                });
+
+                // Activate button
+                const activateButton = document.createElement('a');
+                activateButton.textContent = 'Activate';
+                activateButton.classList.add('activate-button');
+                activateButton.href = '#';
+                activateButton.addEventListener('click', () => {
+                    logins[index].active = true;
+                    localStorage.setItem('policeLogins', JSON.stringify(logins));
+                    renderTable(); // Re-render the table to reflect the changes
+                });
+
+                // Add buttons to the actionButtons div
+                actionButtons.appendChild(deactivateButton);
+                actionButtons.appendChild(activateButton);
+
+                // Append cells to row
+                row.appendChild(usernameCell);
+                row.appendChild(statusCell);
+                row.appendChild(actionCell);
+                actionCell.appendChild(actionButtons);
+
+                // Add row to table body
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Render table when page loads
+        window.onload = renderTable;
+    </script>
+
+</body>
+</html>

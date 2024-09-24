@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Police Portal - Manage Rules</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #a2c2e0, #f8c8d8); /* Light pastel gradient background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #2c3e50; /* Dark pastel color for headings */
+            animation: slideIn 1s ease-in-out forwards;
+        }
+
+        /* Slide-in animation */
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Rules List */
+        .rules-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+        }
+
+        .rule-item {
+            background: #fef9f7; /* Very light pastel pink */
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            color: #333; /* Dark text color for contrast */
+        }
+
+        .rule-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .rule-title {
+            font-size: 1.5rem;
+            color: #a2c2e0; /* Light pastel blue */
+            margin-bottom: 10px;
+        }
+
+        .rule-description {
+            font-size: 1.1rem;
+            color: #6c757d; /* Medium pastel gray */
+        }
+
+        .rule-fine {
+            margin-top: 10px;
+            font-size: 1.2rem;
+            color: #e74c3c; /* Pastel red for fines */
+            font-weight: bold;
+        }
+
+        /* Buttons */
+        .rule-actions button {
+            background-color: #a2c2e0; /* Light pastel blue */
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .rule-actions button:hover {
+            background-color: #8cbad1; /* Slightly darker light pastel blue */
+        }
+
+        /* Form Section */
+        .form-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fef9f7; /* Very light pastel pink */
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section input,
+        .form-section textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd; /* Light pastel gray border */
+            border-radius: 5px;
+            background: #fff; /* White background for input fields */
+        }
+
+        .form-section button {
+            padding: 10px 20px;
+            background-color: #a2c2e0; /* Light pastel blue */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-section button:hover {
+            background-color: #8cbad1; /* Slightly darker light pastel blue */
+        }
+
+        /* Back to Main Page */
+        .back-link {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .back-link a {
+            color: #a2c2e0; /* Light pastel blue */
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+        }
+
+        .back-link a:hover {
+            color: #8cbad1; /* Slightly darker light pastel blue */
+            border-bottom: 2px solid #8cbad1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .rule-title {
+                font-size: 1.3rem;
+            }
+
+            .rule-description {
+                font-size: 1rem;
+            }
+
+            .rule-fine {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Manage Traffic Rules & Fines</h1>
+
+        <!-- Existing Rules List -->
+        <ul class="rules-list" id="rulesList">
+            <li class="rule-item">
+                <p class="rule-title">Speeding</p>
+                <p class="rule-description">Exceeding the maximum speed limit.</p>
+                <p class="rule-fine">Fine: ₹2000</p>
+                <div class="rule-actions">
+                    <button onclick="editRule('Speeding')">Edit</button>
+                    <button onclick="deleteRule(this)">Delete</button>
+                </div>
+            </li>
+            <li class="rule-item">
+                <p class="rule-title">Driving without a License</p>
+                <p class="rule-description">Operating a vehicle without a valid driver’s license.</p>
+                <p class="rule-fine">Fine: ₹5000</p>
+                <div class="rule-actions">
+                    <button onclick="editRule('Driving without a License')">Edit</button>
+                    <button onclick="deleteRule(this)">Delete</button>
+                </div>
+            </li>
+            <li class="rule-item">
+                <p class="rule-title">Running a Red Light</p>
+                <p class="rule-description">Failing to stop at a red traffic signal.</p>
+                <p class="rule-fine">Fine: ₹1500</p>
+                <div class="rule-actions">
+                    <button onclick="editRule('Running a Red Light')">Edit</button>
+                    <button onclick="deleteRule(this)">Delete</button>
+                </div>
+            </li>
+        </ul>
+
+        <!-- Add/Edit Rule Form -->
+        <div class="form-section">
+            <h2>Add/Edit Traffic Rule</h2>
+            <form id="ruleForm">
+                <input type="text" id="ruleTitle" placeholder="Rule Title" required>
+                <textarea id="ruleDescription" placeholder="Rule Description" rows="3" required></textarea>
+                <input type="number" id="ruleFine" placeholder="Fine Amount (₹)" required>
+                <button type="submit">Save Rule</button>
+            </form>
+        </div>
+
+        <!-- Back to Main Page -->
+        <div class="back-link">
+            <a href="index.html">Back to Main Page</a>
+        </div>
+    </div>
+
+    <script>
+        // Function to handle rule editing
+        function editRule(ruleTitle) {
+            document.getElementById('ruleTitle').value = ruleTitle;
+            // Example data: Replace with real data fetching
+            document.getElementById('ruleDescription').value = "Example description for " + ruleTitle;
+            document.getElementById('ruleFine').value = 2000; // Example value
+        }
+
+        // Function to handle rule deletion
+        function deleteRule(button) {
+            const ruleItem = button.closest('.rule-item');
+            if (confirm('Are you sure you want to delete this rule?')) {
+                ruleItem.remove(); // Remove the rule item from the DOM
+            }
+        }
+
+        // Form submission to add or edit rules
+        document.getElementById('ruleForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const title = document.getElementById('ruleTitle').value;
+            const description = document.getElementById('ruleDescription').value;
+            const fine = document.getElementById('ruleFine').value;
+
+            // Create a new rule element
+            const newRule = document.createElement('li');
+            newRule.classList.add('rule-item');
+            newRule.innerHTML = `
+                <p class="rule-title">${title}</p>
+                <p class="rule-description">${description}</p>
+                <p class="rule-fine">Fine: ₹${fine}</p>
+                <div class="rule-actions">
+                    <button onclick="editRule('${title}')">Edit</button>
+                    <button onclick="deleteRule(this)">Delete</button>
+                </div>
+            `;
+
+            // Insert the new rule at the top of the list
+            document.getElementById('rulesList').insertBefore(newRule, document.getElementById('rulesList').firstChild);
+
+            // Clear the form
+            document.getElementById('ruleForm').reset();
+        });
+    </script>
+
+</body>
+</html>

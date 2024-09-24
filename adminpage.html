@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Squad - Admin Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        main {
+            margin: 20px;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        label, input, select {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"], input[type="password"], input[type="email"], select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        button.btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button.btn:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            background-color: white;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>Traffic Squad Admin Portal</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Admin Login Form -->
+        <h2>Admin Login</h2>
+        <form id="adminLoginForm">
+            <label for="adminEmail">Email:</label>
+            <input type="email" id="adminEmail" name="email" required>
+
+            <label for="adminPassword">Password:</label>
+            <input type="password" id="adminPassword" name="password" required>
+
+            <button type="submit" class="btn">Login</button>
+        </form>
+
+        <!-- Manage Police Accounts Form -->
+        <h2>Manage Police Accounts</h2>
+        <form id="managePoliceForm">
+            <label for="policeName">Police Officer Name:</label>
+            <input type="text" id="policeName" name="policeName" required>
+
+            <label for="policeEmail">Police Officer Email:</label>
+            <input type="email" id="policeEmail" name="policeEmail" required>
+
+            <label for="policePassword">Password:</label>
+            <input type="password" id="policePassword" name="policePassword" required>
+
+            <button type="submit" class="btn">Add/Update Officer</button>
+        </form>
+
+        <!-- Manage Police Officers Table -->
+        <h2>Police Officers List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="policeList">
+                <!-- Data from JavaScript -->
+            </tbody>
+        </table>
+
+        <!-- View Daily Reports Table -->
+        <h2>Daily Traffic Violation Reports</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Total Violations</th>
+                    <th>Total Fines Collected</th>
+                </tr>
+            </thead>
+            <tbody id="dailyReports">
+                <!-- Data from JavaScript -->
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+        // Admin Login Form Submit
+        document.getElementById('adminLoginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+
+            console.log("Admin Logged In:", { email, password });
+            alert('Admin login successful!');
+        });
+
+        // Manage Police Officers Form Submit
+        document.getElementById('managePoliceForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const policeName = document.getElementById('policeName').value;
+            const policeEmail = document.getElementById('policeEmail').value;
+            const policePassword = document.getElementById('policePassword').value;
+
+            console.log("Police Officer Added/Updated:", { policeName, policeEmail, policePassword });
+            alert('Police officer added or updated successfully!');
+
+            // Add police officer to the table dynamically
+            const policeList = document.getElementById('policeList');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${Math.floor(Math.random() * 1000)}</td>
+                <td>${policeName}</td>
+                <td>${policeEmail}</td>
+                <td>Active</td>
+            `;
+            policeList.appendChild(newRow);
+        });
+
+        // Fetch Police Officers List (mock data)
+        const policeOfficers = [
+            { id: 1, name: 'Officer John Doe', email: 'johndoe@police.com', status: 'Active' },
+            { id: 2, name: 'Officer Jane Smith', email: 'janesmith@police.com', status: 'Active' },
+        ];
+
+        const policeList = document.getElementById('policeList');
+        policeOfficers.forEach(officer => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${officer.id}</td>
+                <td>${officer.name}</td>
+                <td>${officer.email}</td>
+                <td>${officer.status}</td>
+            `;
+            policeList.appendChild(row);
+        });
+
+        // Fetch Daily Reports (mock data)
+        const reports = [
+            { date: '2024-09-15', totalViolations: 45, totalFines: 15000 },
+            { date: '2024-09-16', totalViolations: 52, totalFines: 17500 },
+        ];
+
+        const dailyReports = document.getElementById('dailyReports');
+        reports.forEach(report => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${report.date}</td>
+                <td>${report.totalViolations}</td>
+                <td>${report.totalFines}</td>
+            `;
+            dailyReports.appendChild(row);
+        });
+    </script>
+
+</body>
+</html>

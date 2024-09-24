@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Filed Cases</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f0f4f8, #cfe0e8); /* Cool, soft gradient background */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            color: #333;
+            overflow-y: auto;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            margin: 20px auto;
+            box-sizing: border-box;
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a1a1a;
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+            letter-spacing: 1.5px;
+            font-weight: bold;
+            animation: slideIn 1s ease-out forwards;
+        }
+
+        /* Slide-in animation */
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            background-color: #3399ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            margin-left: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-bar button:hover {
+            background-color: #2673d2;
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #e6f7ff, #cce4f7);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            opacity: 0;
+            animation: slideUp 0.8s forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* No Cases Found Message */
+        .no-cases {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #ff3333;
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            color: #4a4a4a;
+            margin-bottom: 10px;
+        }
+
+        .proof-photo-link {
+            display: block;
+            margin-top: 10px;
+            color: #3399ff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .proof-photo-link:hover {
+            color: #2673d2;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>View Filed Cases</h1>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Enter Vehicle Number">
+            <button onclick="searchCases()">Search</button>
+        </div>
+
+        <!-- Case Details Section -->
+        <div id="casesContainer">
+            <!-- Case details will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        // Function to search for cases based on vehicle number
+        function searchCases() {
+            const searchInput = document.getElementById('searchInput').value;
+            const casesContainer = document.getElementById('casesContainer');
+            const cases = JSON.parse(localStorage.getItem('cases')) || [];
+            casesContainer.innerHTML = ''; // Clear previous results
+
+            const filteredCases = cases.filter(caseItem => caseItem.vehicleNumber === searchInput);
+
+            if (filteredCases.length === 0) {
+                casesContainer.innerHTML = '<p class="no-cases">No cases found with this vehicle number.</p>';
+            } else {
+                filteredCases.forEach(caseItem => {
+                    const caseDiv = document.createElement('div');
+                    caseDiv.classList.add('section');
+                    caseDiv.innerHTML = `
+                        <h2>Vehicle Number: ${caseItem.vehicleNumber}</h2>
+                        <p>Case Description: ${caseItem.caseDescription}</p>
+                        ${caseItem.proofPhoto ? `<a href="${caseItem.proofPhoto}" class="proof-photo-link" target="_blank">View Proof Photo</a>` : ''}
+                    `;
+                    casesContainer.appendChild(caseDiv);
+                });
+            }
+        }
+    </script>
+
+</body>
+</html>

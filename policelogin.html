@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Police Portal Login</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #2c3e50, #4ca1af);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #444;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #333;
+            animation: slideIn 1s ease-in-out forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .input-field {
+            margin: 15px 0;
+            padding: 12px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 1rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #ff8a00;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background: #e67300;
+        }
+
+        .back-link {
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #007bff;
+            font-weight: bold;
+            font-size: 1rem;
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+        }
+
+        .back-link a:hover {
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+        }
+
+        .error-message {
+            color: #e94e77;
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                width: 90%;
+                padding: 30px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>Police Login</h1>
+        <form id="login-form" onsubmit="return validateLogin();">
+            <input type="text" id="username" class="input-field" placeholder="Username" required>
+            <input type="password" id="password" class="input-field" placeholder="Password" required>
+            <button class="submit-btn" type="submit">Login</button>
+            <div id="error-message" class="error-message"></div>
+        </form>
+
+        <div class="back-link">
+            <a href="index.html">Back to Main Page</a>
+        </div>
+    </div>
+
+    <script>
+        function validateLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+
+            // Retrieve stored logins
+            const logins = JSON.parse(localStorage.getItem('policeLogins')) || [];
+
+            // Check if user already exists
+            const existingUser = logins.find(user => user.username === username);
+
+            if (!existingUser) {
+                // Add new user if not already present
+                const newUser = {
+                    username: username,
+                    password: password,
+                    active: true // Default to active when added
+                };
+                logins.push(newUser);
+                localStorage.setItem('policeLogins', JSON.stringify(logins));
+            }
+
+            // Validate login credentials
+            const user = logins.find(cred => cred.username === username);
+
+            if (user && user.password === password && user.active) {
+                window.location.href = 'policepage.html'; // Redirect to police page
+                return false; // Prevent form from submitting normally
+            } else {
+                errorMessage.textContent = 'Invalid username or password, or user is deactivated';
+                return false; // Prevent form from submitting normally
+            }
+        }
+    </script>
+
+</body>
+</html>

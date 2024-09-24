@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Squad - Registration/Login</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #2c3e50, #4ca1af); /* Gradient background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #444;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95); /* Slightly transparent white */
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        fieldset {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin: 0 auto; /* Center horizontally */
+            max-width: 100%; /* Ensure it doesn't exceed the container's width */
+            box-shadow: none;
+            background: #f9f9f9; /* Light background inside fieldset */
+        }
+
+        legend {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            background-color: #004494;
+            transform: translateY(0);
+        }
+
+        .login-link {
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        .login-link a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Container -->
+    <div class="container" id="formContainer">
+        <!-- Initial Form: Registration -->
+        <form id="registrationForm">
+            <fieldset>
+                <legend>Registration Details</legend>
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+            </fieldset>
+            <button type="submit">Register</button>
+        </form>
+        <div class="login-link">
+            <p>Already Registered? <a href="#" onclick="showLoginForm()">Login here</a></p>
+        </div>
+    </div>
+
+    <script>
+        function showLoginForm() {
+            document.getElementById('formContainer').innerHTML = `
+                <form id="loginForm">
+                    <fieldset>
+                        <legend>User Login</legend>
+                        <div class="form-group">
+                            <label for="loginEmail">Email:</label>
+                            <input type="email" id="loginEmail" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password:</label>
+                            <input type="password" id="loginPassword" name="password" required>
+                        </div>
+                    </fieldset>
+                    <button type="submit">Login</button>
+                </form>
+                <div class="login-link">
+                    <p>Didn't register before? <a href="#" onclick="showRegistrationForm()">Register now</a></p>
+                </div>
+            `;
+
+            document.getElementById('loginForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                // Gather form data
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+
+                if (email && password) {
+                    // Retrieve user details from localStorage
+                    const registeredUser = JSON.parse(localStorage.getItem('userDetails'));
+                    if (registeredUser && registeredUser.email === email && registeredUser.password === password) {
+                        // Redirect to the user fields page
+                        window.location.href = 'search.html';
+                    } else {
+                        alert('Invalid credentials or details.');
+                    }
+                } else {
+                    alert('Please fill in all fields.');
+                }
+            });
+        }
+
+        function showRegistrationForm() {
+            document.getElementById('formContainer').innerHTML = `
+                <form id="registrationForm">
+                    <fieldset>
+                        <legend>Registration Details</legend>
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                    </fieldset>
+                    <button type="submit">Register</button>
+                </form>
+                <div class="login-link">
+                    <p>Already Registered? <a href="#" onclick="showLoginForm()">Login here</a></p>
+                </div>
+            `;
+
+            document.getElementById('registrationForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                // Gather form data
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                if (name && email && password) {
+                    // Save details to localStorage
+                    localStorage.setItem('userDetails', JSON.stringify({ name, email, password }));
+                    alert('Registered Successfully!! Please Login now');
+                    showLoginForm();
+                } else {
+                    alert('Please fill in all registration details.');
+                }
+            });
+        }
+
+        // Initial setup: Add event listener to registration form
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Gather form data
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (name && email && password) {
+                // Save details to localStorage
+                localStorage.setItem('userDetails', JSON.stringify({ name, email, password }));
+                alert('Registered Successfully!! Please Login now');
+                showLoginForm();
+            } else {
+                alert('Please fill in all registration details.');
+            }
+        });
+    </script>
+
+</body>
+</html>

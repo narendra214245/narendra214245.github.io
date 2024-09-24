@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Squad - Police Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        main {
+            margin: 20px;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        label, input, select {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"], input[type="password"], input[type="file"], select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        button.btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button.btn:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            background-color: white;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>Traffic Squad Police Portal</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Police Login Form -->
+        <h2>Police Login</h2>
+        <form id="policeLoginForm">
+            <label for="policeEmail">Email:</label>
+            <input type="email" id="policeEmail" name="email" required>
+
+            <label for="policePassword">Password:</label>
+            <input type="password" id="policePassword" name="password" required>
+
+            <button type="submit" class="btn">Login</button>
+        </form>
+
+        <!-- Create Case Form -->
+        <h2>Create Case</h2>
+        <form id="createCaseForm">
+            <label for="vehicleNumber">Vehicle Number:</label>
+            <input type="text" id="vehicleNumber" name="vehicleNumber" required>
+
+            <label for="violation">Violation:</label>
+            <select id="violation" name="violation" required>
+                <option value="">Select Violation</option>
+                <option value="Over-speeding">Over-speeding</option>
+                <option value="No Seatbelt">No Seatbelt</option>
+                <option value="Red Light Violation">Red Light Violation</option>
+            </select>
+
+            <label for="proofPhoto">Upload Proof Photo:</label>
+            <input type="file" id="proofPhoto" name="proofPhoto" required>
+
+            <button type="submit" class="btn">Create Case</button>
+        </form>
+
+        <!-- Manage Cases Table -->
+        <h2>Manage Cases</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Case ID</th>
+                    <th>Vehicle Number</th>
+                    <th>Violation</th>
+                    <th>Proof</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="caseList">
+                <!-- Data from JavaScript -->
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+        // Police Login Form Submit
+        document.getElementById('policeLoginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = document.getElementById('policeEmail').value;
+            const password = document.getElementById('policePassword').value;
+
+            console.log("Police Logged In:", { email, password });
+            alert('Police login successful!');
+        });
+
+        // Create Case Form Submit
+        document.getElementById('createCaseForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const vehicleNumber = document.getElementById('vehicleNumber').value;
+            const violation = document.getElementById('violation').value;
+            const proofPhoto = document.getElementById('proofPhoto').files[0];
+
+            console.log("Case Created:", { vehicleNumber, violation, proofPhoto });
+            alert('Case created successfully!');
+
+            // Add case to the table dynamically
+            const caseList = document.getElementById('caseList');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${Math.floor(Math.random() * 1000)}</td>
+                <td>${vehicleNumber}</td>
+                <td>${violation}</td>
+                <td><img src="${URL.createObjectURL(proofPhoto)}" alt="Proof" width="50"></td>
+                <td>Pending</td>
+            `;
+            caseList.appendChild(newRow);
+        });
+
+        // Fetch Cases (mock data)
+        const cases = [
+            { id: 1, vehicleNumber: 'MH12AB1234', violation: 'Over-speeding', proof: 'proof1.jpg', status: 'Pending' },
+            { id: 2, vehicleNumber: 'MH12CD5678', violation: 'Red Light Violation', proof: 'proof2.jpg', status: 'Resolved' },
+        ];
+
+        const caseList = document.getElementById('caseList');
+        cases.forEach(singleCase => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${singleCase.id}</td>
+                <td>${singleCase.vehicleNumber}</td>
+                <td>${singleCase.violation}</td>
+                <td><img src="${singleCase.proof}" alt="Proof" width="50"></td>
+                <td>${singleCase.status}</td>
+            `;
+            caseList.appendChild(row);
+        });
+    </script>
+
+</body>
+</html>
